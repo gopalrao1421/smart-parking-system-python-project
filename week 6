@@ -1,0 +1,131 @@
+# week6_oop.py
+# Week 6 - OOP: Slot & ParkingLot Classes (Simple Version)
+
+import datetime
+
+
+# ==================== SLOT CLASS ====================
+class Slot:
+    def __init__(self, slot_id, slot_type, status="Free"):
+        """Constructor to create a new slot"""
+        self.slot_id = int(slot_id)
+        self.slot_type = slot_type
+        self.status = status
+        self.last_updated = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    def update_status(self, new_status):
+        """Method to update slot status"""
+        if new_status in ["Free", "Occupied"]:
+            self.status = new_status
+            self.last_updated = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+            print(f"Slot {self.slot_id} status updated to {new_status}")
+        else:
+            print("Invalid status! Use Free or Occupied.")
+
+    def display(self):
+        """Method to display slot details"""
+        print(f"{self.slot_id:<8} {self.slot_type:<12} {self.status:<10} {self.last_updated}")
+
+
+# ==================== PARKINGLOT CLASS ====================
+class ParkingLot:
+    def __init__(self):
+        """Constructor for ParkingLot"""
+        self.slots = []  # List of Slot objects
+
+    def add_slot(self, slot):
+        """Add a new slot object"""
+        # Check if slot ID already exists
+        for existing_slot in self.slots:
+            if existing_slot.slot_id == slot.slot_id:
+                print(f"❌ Error: Slot ID {slot.slot_id} already exists!")
+                return False
+
+        self.slots.append(slot)
+        print(f"✅ Slot {slot.slot_id} added successfully!")
+        return True
+
+    def view_all_slots(self):
+        """Display all slots"""
+        print("\n--- All Parking Slots ---")
+        if not self.slots:
+            print("No slots available yet.")
+            return
+
+        print("{:<8} {:<12} {:<10} {:<20}".format("ID", "Type", "Status", "Last Updated"))
+        print("-" * 55)
+        for slot in self.slots:
+            slot.display()
+
+    def search_by_id(self, slot_id):
+        """Search slot by ID"""
+        for slot in self.slots:
+            if slot.slot_id == int(slot_id):
+                return slot
+        return None
+
+    def allocate_slot(self):
+        """Simple smart allocation - finds first free slot"""
+        for slot in self.slots:
+            if slot.status == "Free":
+                slot.update_status("Occupied")
+                return slot
+        print("❌ No free slots available!")
+        return None
+
+
+# ==================== MAIN PROGRAM ====================
+def main():
+    print("🚗 Smart Parking System - Week 6 (OOP)")
+    parking = ParkingLot()
+
+    while True:
+        print("\n" + "=" * 50)
+        print("1. Add New Slot")
+        print("2. View All Slots")
+        print("3. Search by ID")
+        print("4. Allocate Slot")
+        print("5. Exit")
+        print("=" * 50)
+
+        choice = input("\nEnter your choice (1-5): ").strip()
+
+        if choice == "1":
+            try:
+                slot_id = input("Enter Slot ID: ")
+                slot_type = input("Enter Slot Type (Regular/EV/Accessible): ").strip().title()
+                if slot_type not in ["Regular", "EV", "Accessible"]:
+                    print("❌ Invalid slot type!")
+                    continue
+                new_slot = Slot(slot_id, slot_type)
+                parking.add_slot(new_slot)
+            except ValueError:
+                print("❌ Error: Slot ID must be a number!")
+
+        elif choice == "2":
+            parking.view_all_slots()
+
+        elif choice == "3":
+            try:
+                sid = input("Enter Slot ID to search: ")
+                found_slot = parking.search_by_id(sid)
+                if found_slot:
+                    found_slot.display()
+                else:
+                    print("❌ Slot not found!")
+            except:
+                print("❌ Invalid Slot ID!")
+
+        elif choice == "4":
+            parking.allocate_slot()
+
+        elif choice == "5":
+            print("✅ Week 6 OOP completed successfully!")
+            break
+
+        else:
+            print("❌ Invalid choice! Please enter 1 to 5.")
+
+
+if __name__ == "__main__":
+    main()
