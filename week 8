@@ -1,0 +1,37 @@
+# week8_exceptions.py
+# Week 8 - Exceptions & Input Validation
+
+slots = []
+
+while True:
+    print("\n1. Add Slot  2. View  3. Exit")
+    try:
+        choice = int(input("Choice: "))
+
+        if choice == 1:
+            sid = int(input("Slot ID: "))
+            if sid <= 0:
+                raise ValueError("Slot ID must be positive")
+            stype = input("Type: ").strip().title()
+            if stype not in ["Regular", "EV", "Accessible"]:
+                raise ValueError("Invalid slot type")
+            slots.append({"id": sid, "type": stype, "status": "Free"})
+            print("Added successfully!")
+
+        elif choice == 2:
+            if not slots:
+                print("No slots yet")
+            else:
+                for s in slots:
+                    print(s)
+
+        elif choice == 3:
+            print("Week 8 completed!")
+            break
+        else:
+            print("Invalid choice")
+
+    except ValueError as e:
+        print(f"❌ Error: {e}")
+    except Exception:
+        print("❌ Invalid input! Try again.")
