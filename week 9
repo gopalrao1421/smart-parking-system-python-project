@@ -1,0 +1,18 @@
+# week9_numpy.py
+# Week 9 - NumPy for Occupancy Statistics
+
+import numpy as np
+
+# Sample data
+statuses = np.array([0, 1, 1, 0, 1, 0, 1])  # 0=Free, 1=Occupied
+
+total_slots = len(statuses)
+occupied = np.sum(statuses)
+free = total_slots - occupied
+occupancy_pct = (occupied / total_slots) * 100
+
+print("=== Occupancy Statistics (Using NumPy) ===")
+print(f"Total Slots     : {total_slots}")
+print(f"Free Slots      : {free}")
+print(f"Occupied Slots  : {occupied}")
+print(f"Occupancy %     : {occupancy_pct:.2f}%")
