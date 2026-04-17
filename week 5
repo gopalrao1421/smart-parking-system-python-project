@@ -1,0 +1,160 @@
+# week5_dict_slots.py
+# Week 5 - Dictionaries & Tuples → Structured Slot Storage
+
+# List to store all slots (each slot is a dictionary)
+slots = []
+
+# List to store logs as tuples: (slot_id, action, timestamp)
+logs = []
+
+import datetime
+
+
+def add_slot():
+    """Add a new parking slot using dictionary"""
+    print("\n--- Add New Parking Slot ---")
+    try:
+        slot_id = int(input("Enter Slot ID: "))
+        if slot_id <= 0:
+            print("❌ Error: Slot ID must be greater than 0!")
+            return
+
+        slot_type = input("Enter Slot Type (Regular / EV / Accessible): ").strip().title()
+        if slot_type not in ["Regular", "EV", "Accessible"]:
+            print("❌ Error: Invalid slot type!")
+            return
+
+        status = input("Enter Status (Free / Occupied) [Free]: ").strip().title()
+        if status == "":
+            status = "Free"
+        if status not in ["Free", "Occupied"]:
+            print("❌ Error: Invalid status!")
+            return
+
+        # Check if slot ID already exists
+        for slot in slots:
+            if slot["id"] == slot_id:
+                print("❌ Error: Slot ID already exists!")
+                return
+
+        # Create slot as dictionary
+        new_slot = {
+            "id": slot_id,
+            "type": slot_type,
+            "status": status
+        }
+        slots.append(new_slot)
+        print(f"✅ Slot {slot_id} added successfully!")
+
+        # Log the action as tuple
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+        logs.append((slot_id, "Added", timestamp))
+
+    except ValueError:
+        print("❌ Error: Slot ID must be a number!")
+
+
+def view_slots():
+    """View all slots"""
+    print("\n--- All Parking Slots ---")
+    if not slots:
+        print("No slots added yet.")
+        return
+
+    print("{:<8} {:<12} {:<10}".format("ID", "Type", "Status"))
+    print("-" * 35)
+    for slot in slots:
+        print("{:<8} {:<12} {:<10}".format(slot["id"], slot["type"], slot["status"]))
+
+
+def search_by_id():
+    """Search slot using dictionary"""
+    print("\n--- Search by Slot ID ---")
+    try:
+        slot_id = int(input("Enter Slot ID: "))
+
+        for slot in slots:
+            if slot["id"] == slot_id:
+                print(f"✅ Found:")
+                print(f"   ID     : {slot['id']}")
+                print(f"   Type   : {slot['type']}")
+                print(f"   Status : {slot['status']}")
+                return
+        print(f"❌ Slot {slot_id} not found!")
+
+    except ValueError:
+        print("❌ Error: Please enter a valid number!")
+
+
+def update_slot_status():
+    """Update status and log as tuple"""
+    print("\n--- Update Slot Status ---")
+    try:
+        slot_id = int(input("Enter Slot ID: "))
+
+        for slot in slots:
+            if slot["id"] == slot_id:
+                new_status = input("New Status (Free / Occupied): ").strip().title()
+                if new_status not in ["Free", "Occupied"]:
+                    print("❌ Error: Invalid status!")
+                    return
+
+                slot["status"] = new_status
+                timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+                logs.append((slot_id, f"Updated to {new_status}", timestamp))
+                print(f"✅ Slot {slot_id} updated to {new_status}")
+                return
+
+        print(f"❌ Slot {slot_id} not found!")
+
+    except ValueError:
+        print("❌ Error: Slot ID must be a number!")
+
+
+def view_logs():
+    """View action logs stored as tuples"""
+    print("\n--- Action Logs (Using Tuples) ---")
+    if not logs:
+        print("No logs yet.")
+        return
+
+    print("{:<8} {:<25} {:<20}".format("Slot ID", "Action", "Timestamp"))
+    print("-" * 55)
+    for log in logs:
+        print("{:<8} {:<25} {:<20}".format(log[0], log[1], log[2]))
+
+
+def main():
+    print("🚗 Smart Parking System - Week 5 (Dictionaries & Tuples)")
+
+    while True:
+        print("\n" + "=" * 50)
+        print("1. Add Parking Slot")
+        print("2. View All Slots")
+        print("3. Search by ID")
+        print("4. Update Slot Status")
+        print("5. View Logs (Tuples)")
+        print("6. Exit")
+        print("=" * 50)
+
+        choice = input("\nEnter your choice (1-6): ").strip()
+
+        if choice == "1":
+            add_slot()
+        elif choice == "2":
+            view_slots()
+        elif choice == "3":
+            search_by_id()
+        elif choice == "4":
+            update_slot_status()
+        elif choice == "5":
+            view_logs()
+        elif choice == "6":
+            print("Thank you! Week 5 completed.")
+            break
+        else:
+            print("❌ Invalid choice! Please enter 1-6.")
+
+
+if __name__ == "__main__":
+    main()
