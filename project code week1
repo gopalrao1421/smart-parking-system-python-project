@@ -1,0 +1,61 @@
+# parking.py
+import datetime
+
+class Slot:
+    def __init__(self, slot_id, slot_type, status="Free"):
+        self.slot_id = int(slot_id)
+        self.slot_type = slot_type
+        self.status = status
+        self.last_updated = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    def update_status(self, new_status):
+        self.status = new_status
+        self.last_updated = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    def to_dict(self):
+        return {
+            "slot_id": self.slot_id,
+            "slot_type": self.slot_type,
+            "status": self.status,
+            "last_updated": self.last_updated
+        }
+
+
+class ParkingLot:
+    def __init__(self):
+        self.slots = {}   # slot_id : Slot object
+
+    def add_slot(self, slot):
+        if slot.slot_id in self.slots:
+            print("Slot ID already exists!")
+            return False
+        self.slots[slot.slot_id] = slot
+        return True
+
+    def view_all_slots(self):
+        return list(self.slots.values())
+
+    def search_by_id(self, slot_id):
+        return self.slots.get(int(slot_id))
+
+    def search_by_type(self, slot_type):
+        return [slot for slot in self.slots.values() if slot.slot_type.lower() == slot_type.lower()]
+
+    def update_slot_status(self, slot_id, new_status):
+        slot = self.search_by_id(slot_id)
+        if slot:
+            slot.update_status(new_status)
+            return True
+        return False
+
+    def allocate_slot(self, vehicle_type="Regular"):
+        for slot in self.slots.values():
+            if slot.status == "Free" and slot.slot_type.lower() == vehicle_type.lower():
+                slot.update_status("Occupied")
+                return slot
+        # If no matching type, take any free slot
+        for slot in self.slots.values():
+            if slot.status == "Free":
+                slot.update_status("Occupied")
+                return slot
+        return None
