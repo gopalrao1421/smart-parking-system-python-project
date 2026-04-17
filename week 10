@@ -1,0 +1,21 @@
+# week10_pandas.py
+# Week 10 - Pandas for Parking Reports
+
+import pandas as pd
+
+data = {
+    "slot_id": [101, 102, 103, 104],
+    "slot_type": ["Regular", "EV", "Accessible", "Regular"],
+    "status": ["Free", "Occupied", "Free", "Occupied"]
+}
+
+df = pd.DataFrame(data)
+
+print("Parking DataFrame:")
+print(df)
+
+print("\nSlot Type Distribution:")
+print(df['slot_type'].value_counts())
+
+print("\nStatus Distribution:")
+print(df['status'].value_counts())
