@@ -1,0 +1,132 @@
+# week3_search.py
+# Week 3 - Strings & Lists → Slot Storage and Search
+
+slots = []  # List to store all parking slots (each slot is a dictionary)
+
+
+def add_slot():
+    print("\n--- Add New Parking Slot ---")
+    try:
+        slot_id = int(input("Enter Slot ID (positive number): "))
+        if slot_id <= 0:
+            print("❌ Error: Slot ID must be greater than 0!")
+            return
+
+        slot_type = input("Enter Slot Type (Regular / EV / Accessible): ").strip().title()
+        if slot_type not in ["Regular", "EV", "Accessible"]:
+            print("❌ Error: Invalid slot type! Use Regular, EV or Accessible.")
+            return
+
+        status = input("Enter Status (Free / Occupied) [Free]: ").strip().title()
+        if status == "":
+            status = "Free"
+        if status not in ["Free", "Occupied"]:
+            print("❌ Error: Invalid status! Use Free or Occupied.")
+            return
+
+        # Store slot as dictionary
+        new_slot = {
+            "id": slot_id,
+            "type": slot_type,
+            "status": status
+        }
+
+        # Check if slot ID already exists
+        for slot in slots:
+            if slot["id"] == slot_id:
+                print("❌ Error: Slot ID already exists!")
+                return
+
+        slots.append(new_slot)
+        print(f"✅ Slot {slot_id} added successfully!")
+
+    except ValueError:
+        print("❌ Error: Slot ID must be a number!")
+
+
+def view_all_slots():
+    print("\n--- All Parking Slots ---")
+    if not slots:
+        print("No slots added yet.")
+        return
+
+    # Neat table format
+    print("{:<8} {:<12} {:<10}".format("Slot ID", "Type", "Status"))
+    print("-" * 35)
+    for slot in slots:
+        print("{:<8} {:<12} {:<10}".format(slot["id"], slot["type"], slot["status"]))
+
+
+def search_by_id():
+    print("\n--- Search by Slot ID ---")
+    try:
+        search_id = int(input("Enter Slot ID to search: "))
+
+        found = False
+        for slot in slots:
+            if slot["id"] == search_id:
+                print(f"✅ Found Slot:")
+                print(f"   ID     : {slot['id']}")
+                print(f"   Type   : {slot['type']}")
+                print(f"   Status : {slot['status']}")
+                found = True
+                break
+
+        if not found:
+            print(f"❌ Slot with ID {search_id} not found!")
+
+    except ValueError:
+        print("❌ Error: Please enter a valid number for Slot ID!")
+
+
+def search_by_type():
+    print("\n--- Search by Slot Type ---")
+    search_type = input("Enter Slot Type (Regular / EV / Accessible): ").strip().title()
+
+    found_slots = []
+    for slot in slots:
+        if slot["type"].lower() == search_type.lower():
+            found_slots.append(slot)
+
+    if not found_slots:
+        print(f"❌ No slots found with type '{search_type}'")
+        return
+
+    print(f"✅ Found {len(found_slots)} slot(s) with type '{search_type}':")
+    print("{:<8} {:<12} {:<10}".format("Slot ID", "Type", "Status"))
+    print("-" * 35)
+    for slot in found_slots:
+        print("{:<8} {:<12} {:<10}".format(slot["id"], slot["type"], slot["status"]))
+
+
+def main():
+    print("🚗 Smart Parking System - Week 3 (Search Features)")
+
+    while True:
+        print("\n" + "=" * 50)
+        print("1. Add Parking Slot")
+        print("2. View All Slots")
+        print("3. Search by Slot ID")
+        print("4. Search by Slot Type")
+        print("5. Exit")
+        print("=" * 50)
+
+        choice = input("\nEnter your choice (1-5): ").strip()
+
+        if choice == "1":
+            add_slot()
+        elif choice == "2":
+            view_all_slots()
+        elif choice == "3":
+            search_by_id()
+        elif choice == "4":
+            search_by_type()
+        elif choice == "5":
+            print("Thank you! Week 3 program ended.")
+            break
+        else:
+            print("❌ Invalid choice! Please enter a number between 1 and 5.")
+
+
+if __name__ == "__main__":
+    main()
