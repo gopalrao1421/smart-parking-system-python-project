@@ -1,0 +1,70 @@
+# week11_matplotlib.py
+# Week 11 - Matplotlib → Visualization
+# This version shows clear printed output + simple charts
+
+import matplotlib.pyplot as plt
+
+print("🚗 Smart Parking System - Week 11 (Data Visualization)")
+print("=" * 55)
+
+# Sample Parking Data for Visualization
+slot_types = ["Regular", "EV", "Accessible"]
+type_counts = [15, 8, 7]          # Number of slots of each type
+
+free_slots = 12
+occupied_slots = 18
+total_slots = free_slots + occupied_slots
+
+print("\n=== Parking Data Summary ===")
+print(f"Total Slots       : {total_slots}")
+print(f"Free Slots        : {free_slots}")
+print(f"Occupied Slots    : {occupied_slots}")
+print(f"Occupancy Rate    : { (occupied_slots / total_slots * 100):.1f} %")
+
+print("\nSlot Type Distribution:")
+for t, c in zip(slot_types, type_counts):
+    print(f"  {t:<12} : {c} slots")
+
+# ==================== VISUALIZATIONS ====================
+
+print("\n📊 Generating Charts... (Close chart windows to continue)")
+
+# 1. Bar Chart - Free vs Occupied Slots
+plt.figure(figsize=(7, 5))
+plt.bar(['Free Slots', 'Occupied Slots'],
+        [free_slots, occupied_slots],
+        color=['green', 'red'])
+plt.title('Parking Slot Occupancy')
+plt.ylabel('Number of Slots')
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.show()
+
+# 2. Pie Chart - Slot Type Distribution
+plt.figure(figsize=(7, 7))
+plt.pie(type_counts,
+        labels=slot_types,
+        autopct='%1.1f%%',
+        startangle=90,
+        colors=['lightblue', 'orange', 'lightgreen'])
+plt.title('Distribution of Slot Types')
+plt.axis('equal')   # Equal aspect ratio ensures pie is drawn as circle
+plt.show()
+
+# 3. Line Chart - Occupancy Trend (Simulated)
+days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+occupancy_percent = [45, 68, 85, 72, 55]
+
+plt.figure(figsize=(8, 5))
+plt.plot(days, occupancy_percent,
+         marker='o',
+         linewidth=2,
+         color='blue')
+plt.title('Parking Occupancy Trend Over the Week')
+plt.xlabel('Day')
+plt.ylabel('Occupancy Percentage (%)')
+plt.ylim(0, 100)
+plt.grid(True, linestyle='--', alpha=0.7)
+plt.show()
+
+print("\n✅ All charts generated and displayed successfully!")
+print("Week 11 Visualization completed.")
