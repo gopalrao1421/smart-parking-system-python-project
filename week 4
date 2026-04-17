@@ -1,0 +1,137 @@
+# week4_functions.py
+# Week 4 - Functions → Modular Parking Management
+
+slots = []  # List to store all parking slots
+
+
+# ==================== FUNCTIONS ====================
+
+def add_slot():
+    """Function to add a new parking slot"""
+    print("\n--- Add New Parking Slot ---")
+    try:
+        slot_id = int(input("Enter Slot ID: "))
+        if slot_id <= 0:
+            print("❌ Error: Slot ID must be greater than 0!")
+            return
+
+        slot_type = input("Enter Slot Type (Regular / EV / Accessible): ").strip().title()
+        if slot_type not in ["Regular", "EV", "Accessible"]:
+            print("❌ Error: Invalid slot type! Use Regular, EV or Accessible only.")
+            return
+
+        status = input("Enter Status (Free / Occupied) [Free]: ").strip().title()
+        if status == "":
+            status = "Free"
+        if status not in ["Free", "Occupied"]:
+            print("❌ Error: Invalid status! Use Free or Occupied.")
+            return
+
+        # Check if slot ID already exists
+        for slot in slots:
+            if slot["id"] == slot_id:
+                print("❌ Error: Slot ID already exists!")
+                return
+
+        # Add new slot
+        new_slot = {
+            "id": slot_id,
+            "type": slot_type,
+            "status": status
+        }
+        slots.append(new_slot)
+        print(f"✅ Slot {slot_id} added successfully!")
+
+    except ValueError:
+        print("❌ Error: Slot ID must be a number!")
+
+
+def view_slots():
+    """Function to view all parking slots"""
+    print("\n--- All Parking Slots ---")
+    if not slots:
+        print("No slots added yet.")
+        return
+
+    print("{:<8} {:<12} {:<10}".format("Slot ID", "Type", "Status"))
+    print("-" * 35)
+    for slot in slots:
+        print("{:<8} {:<12} {:<10}".format(slot["id"], slot["type"], slot["status"]))
+
+
+def search_slot():
+    """Function to search slot by ID"""
+    print("\n--- Search Slot by ID ---")
+    try:
+        slot_id = int(input("Enter Slot ID to search: "))
+
+        for slot in slots:
+            if slot["id"] == slot_id:
+                print(f"✅ Slot Found:")
+                print(f"   ID     : {slot['id']}")
+                print(f"   Type   : {slot['type']}")
+                print(f"   Status : {slot['status']}")
+                return
+
+        print(f"❌ Slot with ID {slot_id} not found!")
+
+    except ValueError:
+        print("❌ Error: Please enter a valid number!")
+
+
+def update_slot_status():
+    """Function to update slot status"""
+    print("\n--- Update Slot Status ---")
+    try:
+        slot_id = int(input("Enter Slot ID to update: "))
+
+        for slot in slots:
+            if slot["id"] == slot_id:
+                new_status = input("Enter new status (Free / Occupied): ").strip().title()
+                if new_status in ["Free", "Occupied"]:
+                    slot["status"] = new_status
+                    print(f"✅ Slot {slot_id} status updated to {new_status}")
+                    return
+                else:
+                    print("❌ Error: Invalid status! Use Free or Occupied.")
+                    return
+
+        print(f"❌ Slot with ID {slot_id} not found!")
+
+    except ValueError:
+        print("❌ Error: Slot ID must be a number!")
+
+
+# ==================== MAIN MENU ====================
+
+def main():
+    print("🚗 Smart Parking System - Week 4 (Using Functions)")
+
+    while True:
+        print("\n" + "=" * 45)
+        print("1. Add Parking Slot")
+        print("2. View All Slots")
+        print("3. Search Slot by ID")
+        print("4. Update Slot Status")
+        print("5. Exit")
+        print("=" * 45)
+
+        choice = input("\nEnter your choice (1-5): ").strip()
+
+        if choice == "1":
+            add_slot()
+        elif choice == "2":
+            view_slots()
+        elif choice == "3":
+            search_slot()
+        elif choice == "4":
+            update_slot_status()
+        elif choice == "5":
+            print("Thank you! Week 4 program completed.")
+            break
+        else:
+            print("❌ Invalid choice! Please enter 1 to 5.")
+
+
+if __name__ == "__main__":
+    main()
