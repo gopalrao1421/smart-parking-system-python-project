@@ -1,0 +1,47 @@
+# week7_file_handling.py
+# Week 7 - File Handling with CSV
+
+import csv
+import os
+
+DATA_DIR = "data"
+if not os.path.exists(DATA_DIR):
+    os.makedirs(DATA_DIR)
+
+slots_file = os.path.join(DATA_DIR, "slots.csv")
+
+slots = []
+
+def load_slots():
+    if os.path.exists(slots_file):
+        with open(slots_file, 'r', newline='') as f:
+            reader = csv.reader(f)
+            next(reader, None)
+            for row in reader:
+                if row:
+                    slots.append({"id": int(row[0]), "type": row[1], "status": row[2]})
+
+def save_slots():
+    with open(slots_file, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(["slot_id", "slot_type", "status"])
+        for slot in slots:
+            writer.writerow([slot["id"], slot["type"], slot["status"]])
+
+load_slots()
+
+while True:
+    print("\n1. Add Slot  2. View Slots  3. Save & Exit")
+    ch = input("Choice: ")
+    if ch == "1":
+        sid = int(input("Slot ID: "))
+        stype = input("Type: ").strip().title()
+        slots.append({"id": sid, "type": stype, "status": "Free"})
+        print("Slot added!")
+    elif ch == "2":
+        for s in slots:
+            print(s)
+    elif ch == "3":
+        save_slots()
+        print("Data saved!")
+        break
