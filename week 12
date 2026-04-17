@@ -1,0 +1,65 @@
+# week12_final.py
+# Week 12 - Final Integration
+
+import datetime
+import os
+import csv
+
+slots = []
+DATA_DIR = "data"
+if not os.path.exists(DATA_DIR):
+    os.makedirs(DATA_DIR)
+
+
+def save_data():
+    with open(os.path.join(DATA_DIR, "slots.csv"), 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(["id", "type", "status"])
+        for s in slots:
+            writer.writerow([s["id"], s["type"], s["status"]])
+
+
+while True:
+    print("\n" + "=" * 50)
+    print("SMART PARKING SYSTEM - FINAL PROJECT")
+    print("1. Add Slot   2. View Slots   3. Update Status")
+    print("4. Allocate   5. Stats        6. Exit")
+    print("=" * 50)
+
+    ch = input("Choice: ")
+
+    if ch == "1":
+        sid = int(input("Slot ID: "))
+        stype = input("Type: ").strip().title()
+        slots.append({"id": sid, "type": stype, "status": "Free"})
+        print("Added!")
+
+    elif ch == "2":
+        for s in slots:
+            print(s)
+
+    elif ch == "3":
+        sid = int(input("Slot ID: "))
+        for s in slots:
+            if s["id"] == sid:
+                s["status"] = input("New Status: ")
+                print("Updated!")
+
+    elif ch == "4":
+        for s in slots:
+            if s["status"] == "Free":
+                s["status"] = "Occupied"
+                print(f"Allocated Slot {s['id']}")
+                break
+        else:
+            print("No free slot")
+
+    elif ch == "5":
+        total = len(slots)
+        occupied = sum(1 for s in slots if s["status"] != "Free")
+        print(f"Total: {total} | Occupied: {occupied} | Free: {total - occupied}")
+
+    elif ch == "6":
+        save_data()
+        print("Thank you! Project Completed Successfully.")
+        break
